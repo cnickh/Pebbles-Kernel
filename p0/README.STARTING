@@ -1,0 +1,53 @@
+
+== Getting started ==
+
+To get started you should run "make update",
+and you should do this essentially any time
+that a regular "make" says you should--"make
+update" downloads changes made by the course
+staff to support files.
+
+When you are up to date, you can run "make".
+
+When you're ready to turn in, run "make clean".
+
+== File inventory ==
+
+traceback.mk
+ Editing this file instructs the Makefile
+ how to build your program.  Please follow
+ the directions within.
+
+traceback.c
+ Here is where you should write your
+ traceback() function.  As appropriate
+ you may put some of your implementation
+ in other source files--if so, you must
+ explain to traceback.mk.
+
+traceback.h
+traceback_globals.c
+traceback_internal.h
+Makefile
+doxygen.conf
+symtabgen.pl
+update.sh
+ Don't edit these files.
+
+add_one.S
+add_one.h
+add_one_test.c
+ These files are provided for reference
+ purposes.
+
+evil_test.c
+simple_test.c
+verify_test.c
+voidstar_test.c
+ Some sample tests for you to read and
+ enjoy.
+
+sample.output
+ This is the output your traceback()
+ should produce when invoked by
+ verify_test.

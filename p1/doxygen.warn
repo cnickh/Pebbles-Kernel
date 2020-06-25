@@ -1,0 +1,12 @@
+warning: source ./README.dox is not a readable file or directory... skipping.
+/home/nick/Desktop/dwld/P1/p1/kern/game_kern_main.c:1: warning: the name 'kernel.c' supplied as the argument in the \file statement is not an input file
+/home/nick/Desktop/dwld/P1/p1/kern/inc/console.h:18: warning: Found unknown command '\r'
+/home/nick/Desktop/dwld/P1/p1/kern/inc/console.h:21: warning: expected whitespace after \b command
+/home/nick/Desktop/dwld/P1/p1/kern/inc/console.h:38: warning: Found unknown command '\r'
+/home/nick/Desktop/dwld/P1/p1/kern/inc/console.h:38: warning: expected whitespace after \b command
+/home/nick/Desktop/dwld/P1/p1/kern/inc/console.h:18: warning: Found unknown command '\r'
+/home/nick/Desktop/dwld/P1/p1/kern/inc/console.h:21: warning: expected whitespace after \b command
+/home/nick/Desktop/dwld/P1/p1/kern/inc/console.h:38: warning: Found unknown command '\r'
+/home/nick/Desktop/dwld/P1/p1/kern/inc/console.h:38: warning: expected whitespace after \b command
+/home/nick/Desktop/dwld/P1/p1/kern/handler_install.c:15: warning: Member handler_install(void) (function) of file handler_install.c is not documented.
+/home/nick/Desktop/dwld/P1/p1/kern/tick.c:16: warning: Member tick(unsigned int numTicks) (function) of file tick.c is not documented.

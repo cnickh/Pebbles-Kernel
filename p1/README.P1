@@ -1,0 +1,26 @@
+####################
+# Inventory
+####################
+
+README.P1 - this self-referential file
+config.mk - to build, edit config.mk--not the Makefile!
+kern      - template files; edit these and add more!
+update.sh - see below
+
+####################
+# Getting started
+####################
+
+To get started, run
+
+  % ./update.sh web
+
+The first time you'll see gajillions of messages about
+missing files, because when you start out you're missing
+gajillions of files.  That's ok.  Once you've fetched
+those files you can try "make".
+
+Please be careful when adding things to config.mk that you
+put everything in the right place--if some .o files are
+listed in the wrong place your game might build for you but
+either the game or the console tester won't build for us.
