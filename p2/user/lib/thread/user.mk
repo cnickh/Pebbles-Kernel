@@ -1,0 +1,7 @@
+# Import from config.mk
+STUULIB_THREAD_OBJS := $(THREAD_OBJS:%=$(STUULIBDIR)/thread/%)
+
+ALL_STUUOBJS += $(STUULIB_THREAD_OBJS)
+STUUCLEANS += $(STUULIBDIR)/libthread.a
+
+$(STUULIBDIR)/libthread.a: $(STUULIB_THREAD_OBJS)

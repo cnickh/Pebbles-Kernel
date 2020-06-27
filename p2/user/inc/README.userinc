@@ -1,0 +1,2 @@
+This directory exists for you to store header files that are not specific to
+your libraries; for that you should use user/lib/inc.
