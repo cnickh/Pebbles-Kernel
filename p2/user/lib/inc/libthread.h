@@ -9,8 +9,12 @@
 */
 
 #ifndef _LIBTHREAD_H_
-#def _LIBTHREAD_H_
+#define _LIBTHREAD_H_
 
+#include <cond_type.h>
+#include <mutex_type.h>
+#include <rwlock_type.h>
+#include <sem_type.h>
 
 /*Functions for thread management*/
 int thr_init(unsigned int size);

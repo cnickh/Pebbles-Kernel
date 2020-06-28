@@ -11,13 +11,13 @@
  *  Second parameter: number of chasethreads (default 20)
  *  Third parameter: footprint (default 2)
  *
- *  Each 'chase' thread will attempt to acquire up to 'footprint' locks in an 
+ *  Each 'chase' thread will attempt to acquire up to 'footprint' locks in an
  *  array of mutexes, in strict increasing order starting from zero. Once it
  *  acquires that many locks, the thread will proceed by releasing the lowest-
  *  numbered lock before proceeding to acquire the next highest lock. So a thread
  *  with a footprint of 3 and n_mutexes set to 10 would have the following
  *  behavior:
- * 
+ *
  *  acquire 0, 1, 2
  *  release 0
  *  acquire 3
@@ -28,13 +28,13 @@
  *  release 8
  *  release 9
  *  release 10
- *  
+ *
  * If the threads implementation is working, this should simply finish. If this
  * test gets stuck for reasonable-sized parameters, then there might be something
  * wrong with the threads implementation. Using huge numbers (e.g. an order of
  * magnitude more than the default paramters) may run extremely slowly on Simics,
  * of course.
- * 
+ *
  * There is a stupid magic constant (defined as 4) that determines which threads
  * will call yield in the middle of their lock acquire/release loop. Currently
  * thread with "creation_number" divisible by 4 will call yield on the iteration of
@@ -59,7 +59,7 @@
 */
 
 
-#include <thread.h>
+#include <libthread.h>
 #include <stdio.h>
 #include <syscall.h>
 #include <stdlib.h>
@@ -98,7 +98,7 @@ void * chase(void * arg) {
     // TODO: here's the point that we 'periodically do something' such as sleep() or yield()
     if (((my_creation_number % STUPID_MAGIC_CONSTANT) == 0)
         && ((highest_mutex_released % STUPID_MAGIC_CONSTANT) == 0)) {
-      yield(-1);	
+      yield(-1);
     }
     // we only start releasing mutexes when we've acquired a total of "footprint" mutexes
     if (next_mutex_to_acquire >= footprint) {
@@ -128,7 +128,7 @@ int main( int argc, char *argv[] ) {
         default:
 		break;
     }
-	
+
 	// the requirement for n_chasethreads is obscure but not entirely stupid
 	// what we're trying to make sure is that there are some threads that
 	// get 'caught behind' a 'yielder' thread under most normal scheduling choices

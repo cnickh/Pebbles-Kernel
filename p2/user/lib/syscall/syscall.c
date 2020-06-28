@@ -17,27 +17,6 @@
  */
 
 
-int fork(void)
-{
-	return -1;
-}
-
-int exec(char *execname, char *argvec[])
-{
-	return -1;
-}
-
-
-int wait(int *status_ptr)
-{
-	return -1;
-}
-
-int yield(int pid)
-{
-	return -1;
-}
-
 int cas_runflag(int tid, int *oldp, int *expectp, int *newp)
 {
 	return -1;
@@ -63,10 +42,7 @@ int readline(int size, char *buf)
 	return -1;
 }
 
-int print(int size, char *buf)
-{
-	return -1;
-}
+
 
 int set_term_color(int color)
 {
