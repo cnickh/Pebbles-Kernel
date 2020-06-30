@@ -13,16 +13,16 @@
 
 #include <cond.h>
 #include <thrgrp.h>
-#include <thread.h>
+#include <libthread.h>
 #include <syscall.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <magic_break.h>
 #include <assert.h>
 
-/** 
- * @brief Initializes a thread group 
- * 
+/**
+ * @brief Initializes a thread group
+ *
  * This function basically just initializes mutexes etc.
  *
  * @param eg An unitialized, but allocated, thread group to be initialized
@@ -36,14 +36,14 @@ int thrgrp_init_group(thrgrp_group_t *eg){
   eg->zombie_in=NULL;
   eg->zombie_out=NULL;
   if((ret=mutex_init(&(eg->lock))))
-    return ret; 
+    return ret;
   if((ret=cond_init(&(eg->cv))))
     return ret;
   return 0;
 }
 
 /**
- * @brief Destroys an initialized the thrgroup 
+ * @brief Destroys an initialized the thrgroup
  *
  * Destroys the mutex's and other related stuff
  *
@@ -60,8 +60,8 @@ int thrgrp_destroy_group(thrgrp_group_t *eg){
   if(eg->zombie_in || eg->zombie_out)
     ret = 1;
   mutex_unlock(&(eg->lock));
-  ret |= mutex_destroy(&(eg->lock)); 
-  ret |= cond_destroy(&(eg->cv)); 
+  ret |= mutex_destroy(&(eg->lock));
+  ret |= cond_destroy(&(eg->cv));
   return ret;
 }
 
@@ -80,7 +80,7 @@ static void *thrgrp_bottom(void *in_data){
   thrgrp_group_t *tg = data->tmp.tg;
   void * ret;
 
-  /* now that we have all of the data out of data, 
+  /* now that we have all of the data out of data,
     we'll use it as our queueing element */
 
   data->qel.next = NULL;
@@ -132,18 +132,18 @@ int thrgrp_create(thrgrp_group_t *tg, void *(*func)(void *),void *arg){
   /* tid<0 indicates error */
   if(tid < 0)
     return tid;
-  
-  /* we don't return the tid, because your not supposed to join on it 
+
+  /* we don't return the tid, because your not supposed to join on it
     must be joined with thrgrp_join(), not thr_join() */
   return 0;
 }
 
 
 /** @brief joins on any thread which exits in the group
- * 
- * like thr_join(), but will join on any exited thread which was spawned into 
+ *
+ * like thr_join(), but will join on any exited thread which was spawned into
  * this thread group via thrgrp_create()
- * 
+ *
  * throughout this function thrgrp_queue_el_t is a LIE! in reality this is
  * thrgrp_data_t, a union including thrgrp_queue_el_t as a subtype. this is
  * only important because one should realize "free" is freeing thrgrp_data_t
@@ -168,7 +168,7 @@ int thrgrp_join(thrgrp_group_t* eg, void **status){
       panic("thrgrp_join: cond_wait failed... we're BORKEN!!\n");
     }
     /* inside of cond_wait, someone can sneek in
-     * I.E. even if condition variables are implemented in order 
+     * I.E. even if condition variables are implemented in order
      * we do not have guaranteed in order joins */
   }
   /* get our zombie from the queue */
@@ -188,4 +188,3 @@ int thrgrp_join(thrgrp_group_t* eg, void **status){
   /* join on the tid, and return the result */
   return thr_join(tid, status);
 }
-

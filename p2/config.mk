@@ -77,7 +77,7 @@ UPDATE_METHOD = web
 # A list of the test programs you want compiled in from the 410user/progs
 # directory
 #
-410TESTS =
+410TESTS = #agility_drill
 
 ###########################################################################
 # Test programs you have written which you wish to run
@@ -85,17 +85,17 @@ UPDATE_METHOD = web
 # A list of the test programs you want compiled in from the user/progs
 # directory
 #
-STUDENTTESTS = syscall_test forkedp
+STUDENTTESTS = syscall_test forkedp thread_test
 
 ###########################################################################
 # Object files for your thread library
 ###########################################################################
-THREAD_OBJS = malloc.o
+THREAD_OBJS = malloc.o thread.o mutex.o thr_fork.o
 
 ###########################################################################
 # Object files for your syscall wrappers
 ###########################################################################
-SYSCALL_OBJS = set_status.o vanish.o fork.o exec.o yield.o wait.o print.o
+SYSCALL_OBJS = set_status.o vanish.o fork.o exec.o yield.o wait.o print.o new_pages.o
 
 ###########################################################################
 # Libraries!

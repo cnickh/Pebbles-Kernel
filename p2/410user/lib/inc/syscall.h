@@ -1,7 +1,7 @@
 /* The 15-410 kernel.
  * syscall.h
  *
- * Prototypes for the user land C library interface 
+ * Prototypes for the user land C library interface
  * to system calls.
  *
  */
