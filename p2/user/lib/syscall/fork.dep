@@ -1,0 +1,4 @@
+user/lib/syscall/fork.o: user/lib/syscall/fork.S \
+ 410user/lib/inc/syscall_int.h
+
+410user/lib/inc/syscall_int.h:

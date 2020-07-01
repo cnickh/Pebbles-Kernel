@@ -1,0 +1,4 @@
+410user/lib/string/strcmp.o: 410user/lib/string/strcmp.c \
+ 410user/lib/inc/string.h
+
+410user/lib/inc/string.h:

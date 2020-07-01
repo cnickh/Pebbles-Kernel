@@ -1,0 +1,4 @@
+410user/lib/string/strpbrk.o: 410user/lib/string/strpbrk.c \
+ 410user/lib/inc/string.h
+
+410user/lib/inc/string.h:

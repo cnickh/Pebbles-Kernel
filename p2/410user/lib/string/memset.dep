@@ -1,0 +1,4 @@
+410user/lib/string/memset.o: 410user/lib/string/memset.S \
+ 410user/lib/inc/asm.h
+
+410user/lib/inc/asm.h:

@@ -1,0 +1,4 @@
+410user/lib/string/strsep.o: 410user/lib/string/strsep.c \
+ 410user/lib/inc/string.h
+
+410user/lib/inc/string.h:

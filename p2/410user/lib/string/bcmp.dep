@@ -1,0 +1,4 @@
+410user/lib/string/bcmp.o: 410user/lib/string/bcmp.c \
+ 410user/lib/inc/string.h
+
+410user/lib/inc/string.h:

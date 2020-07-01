@@ -1,0 +1,4 @@
+user/lib/thread/thr_fork.o: user/lib/thread/thr_fork.S \
+ 410user/lib/inc/syscall_int.h
+
+410user/lib/inc/syscall_int.h:

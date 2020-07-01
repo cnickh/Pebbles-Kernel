@@ -13,6 +13,7 @@ int mutex_init(mutex_t *mp){
 
 int mutex_destroy(mutex_t *mp){
   mp->valid = 0;
+  return 0;
 }
 
 int mutex_lock(mutex_t *mp){
@@ -32,7 +33,6 @@ int mutex_lock(mutex_t *mp){
   } else {
     return -2; //return error on invalid lock
   }
-
 }
 
 int mutex_unlock(mutex_t *mp){

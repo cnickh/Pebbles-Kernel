@@ -15,8 +15,7 @@ test %eax, %eax
 jne .parent
 
 // child!
-mov %ebx, %ebp //Give the child a nw %ebp
-mov %ebp, %esp //Give the child a nw %esp
+mov %ebx, %esp //Give the child a nw %esp
 ret
 
 .parent:

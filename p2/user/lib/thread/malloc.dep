@@ -1,0 +1,4 @@
+user/lib/thread/malloc.o: user/lib/thread/malloc.c \
+ 410user/lib/inc/stdlib.h
+
+410user/lib/inc/stdlib.h:

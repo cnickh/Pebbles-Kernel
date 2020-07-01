@@ -20,7 +20,7 @@
 typedef struct stk_map { //Important variables for mapping the stack
 
   void *limit; //top of virtual process memory
-  unsigned int tstack_sz;
+  unsigned int tstack_sz; //space allocated for each thread
 
   mutex_t lock;
 

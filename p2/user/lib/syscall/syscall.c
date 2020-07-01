@@ -22,10 +22,6 @@ int cas_runflag(int tid, int *oldp, int *expectp, int *newp)
 	return -1;
 }
 
-int gettid(void)
-{
-	return -1;
-}
 
 int sleep(int ticks)
 {
@@ -76,16 +72,6 @@ void task_vanish(int status)
 	status /= status;
 	while (1)
 		continue;
-}
-
-int new_pages(void * addr, int len)
-{
-	return -1;
-}
-
-int remove_pages(void * addr)
-{
-	return -1;
 }
 
 int get_ticks()

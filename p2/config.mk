@@ -77,7 +77,7 @@ UPDATE_METHOD = web
 # A list of the test programs you want compiled in from the 410user/progs
 # directory
 #
-410TESTS = #agility_drill
+410TESTS = agility_drill
 
 ###########################################################################
 # Test programs you have written which you wish to run
@@ -90,12 +90,12 @@ STUDENTTESTS = syscall_test forkedp thread_test
 ###########################################################################
 # Object files for your thread library
 ###########################################################################
-THREAD_OBJS = malloc.o thread.o mutex.o thr_fork.o
+THREAD_OBJS = malloc.o thread.o mutex.o thr_fork.o cond.o
 
 ###########################################################################
 # Object files for your syscall wrappers
 ###########################################################################
-SYSCALL_OBJS = set_status.o vanish.o fork.o exec.o yield.o wait.o print.o new_pages.o
+SYSCALL_OBJS = set_status.o vanish.o fork.o exec.o yield.o wait.o print.o new_pages.o remove_pages.o gettid.o
 
 ###########################################################################
 # Libraries!
@@ -106,7 +106,7 @@ SYSCALL_OBJS = set_status.o vanish.o fork.o exec.o yield.o wait.o print.o new_pa
 # library.
 #
 # Otherwise, you should probably not modify any of these lines.
-410USER_LIBS_EARLY = #libthrgrp.a
+410USER_LIBS_EARLY = libthrgrp.a
 410USER_LIBS_LATE = libRNG.a libmalloc.a libstdio.a libstdlib.a libstring.a
 STUDENT_LIBS_EARLY = libthread.a
 STUDENT_LIBS_LATE = libsyscall.a
