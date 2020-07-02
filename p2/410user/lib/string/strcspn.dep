@@ -1,4 +1,0 @@
-410user/lib/string/strcspn.o: 410user/lib/string/strcspn.c \
- 410user/lib/inc/string.h
-
-410user/lib/inc/string.h:

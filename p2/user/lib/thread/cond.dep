@@ -1,6 +1,0 @@
-user/lib/thread/cond.o: user/lib/thread/cond.c user/lib/inc/cond_type.h \
- user/lib/inc/mutex_type.h
-
-user/lib/inc/cond_type.h:
-
-user/lib/inc/mutex_type.h:

@@ -72,10 +72,10 @@ LDFLAGSENTRY = --entry=_main
 
 ############# BUILD PARAMETER VARIABLES ################
 # Note that this section DEPENDS UPON THE INCLUDES ABOVE
-KCFLAGS = -nostdinc -fno-strict-aliasing -fno-builtin -Wall -gstabs -O0 -m32
+KCFLAGS = -nostdinc -fno-strict-aliasing -fno-builtin -Wall -gstabs -O0 -m32 -fno-stack-protector
 KLDFLAGS = -static -Ttext 100000 --fatal-warnings -melf_i386
 KINCLUDES = -I$(410KDIR)/inc -I$(410KLIBDIR)/inc -I$(STUKDIR)/inc
-UCFLAGS = -nostdinc -fno-strict-aliasing -fno-builtin -Wall -gstabs -O0 -m32
+UCFLAGS = -nostdinc -fno-strict-aliasing -fno-builtin -Wall -gstabs -O0 -m32 -fno-stack-protector
 ULDFLAGS = -static -Ttext 1000000 --fatal-warnings -melf_i386 $(LDFLAGSENTRY)
 UINCLUDES = -I$(410UDIR)/inc -I$(410ULIBDIR)/inc \
 						-I$(STUUDIR)/inc -I$(STUULIBDIR)/inc

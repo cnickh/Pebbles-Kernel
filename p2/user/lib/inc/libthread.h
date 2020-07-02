@@ -35,6 +35,7 @@ typedef struct tcb { //Thread control block, for populating thread memory
 
 } tcb_t;
 
+
 /*Functions for thread management*/
 int thr_init(unsigned int size);
 
@@ -45,6 +46,8 @@ int thr_join(int tid, void **statusp);
 void thr_exit (void *status);
 
 int thr_getid(void);
+
+void test_mem(void);
 
 /*Functions for mutexes*/
 int mutex_init(mutex_t *mp);

@@ -36,7 +36,7 @@
 # "offline" is strongly not recommended as you may miss important project
 # updates.
 #
-UPDATE_METHOD = web
+UPDATE_METHOD = offline
 
 ###########################################################################
 # WARNING: Do not put extraneous test programs into the REQPROGS variables.

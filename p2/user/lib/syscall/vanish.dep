@@ -1,4 +1,0 @@
-user/lib/syscall/vanish.o: user/lib/syscall/vanish.S \
- 410user/lib/inc/syscall_int.h
-
-410user/lib/inc/syscall_int.h:

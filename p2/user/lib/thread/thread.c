@@ -29,8 +29,8 @@ int thr_init(unsigned int size){
   /* Set thread stack size */
   stk_map.tstack_sz = MK_PAGE_ALIGN(size);
 
-  /* Set top of stack memory to top of main's stack */
-  stk_map.limit = (void *)(MK_PAGE_ALIGN(get_sp()));
+  /* Set limit of stack memory to bottom of main's stack */
+  stk_map.limit = (void *)(MK_PAGE_ALIGN(get_sp()) - 3*PAGE_SIZE);
 
   return 0;
 }
@@ -40,10 +40,23 @@ int thr_init(unsigned int size){
 *  Define stack base for the thread,
 * call thr_fork() and pass %esp to the newly allocated stack space
 *
+_________STACK__________
+0xfffff000, esp_main round down
+0xffffe000, end of initial task stack
+0xffffd000
+0xffffc000, end of new mem
+0xffffb000, new_pages(PAGE_SIZE)
+
 */
+
+
 int thr_create(void *(*func)(void*), void *arg){
 
-  void *tbase = stk_map.limit;
+  /*Make an attempt to allocate memory*/
+  int err = new_pages(DECREMENT(),stk_map.tstack_sz);
+
+  /*Set the new thread stack base to the bottom of the current stack*/
+  void *tbase = stk_map.limit-12;
 
   /*IMPORTANT thread memory must be layed out BEFORE forking*/
   *(unsigned int *)tbase = (unsigned int)func;
@@ -51,13 +64,10 @@ int thr_create(void *(*func)(void*), void *arg){
 
   /*fork and pass the thread esp*/
   thr_fork(tbase);
-  printf("thread has been made @%p\n",tbase);
 
-
-  /*decrement task limit*/
+  /*decrement task limit, extend*/
   stk_map.limit = DECREMENT();
-  //int err = new_pages(stk_map.limit,stk_map.tstack_sz); //allocate space if needed
-//  printf("new_pages return [%d]\n",err);
+
   return 0;
 }
 
@@ -70,5 +80,5 @@ void thr_exit (void *status){
 }
 
 int thr_getid(void){
-  return -1;
+  return gettid();
 }
