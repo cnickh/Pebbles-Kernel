@@ -1,6 +1,0 @@
-410user/lib/stdio/sprintf.o: 410user/lib/stdio/sprintf.c \
- 410user/lib/inc/stdarg.h 410user/lib/stdio/doprnt.h
-
-410user/lib/inc/stdarg.h:
-
-410user/lib/stdio/doprnt.h:

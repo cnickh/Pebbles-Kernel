@@ -1,4 +1,0 @@
-user/lib/syscall/wait.o: user/lib/syscall/wait.S \
- 410user/lib/inc/syscall_int.h
-
-410user/lib/inc/syscall_int.h:

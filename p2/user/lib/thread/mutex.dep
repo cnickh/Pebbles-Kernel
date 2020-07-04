@@ -1,6 +1,0 @@
-user/lib/thread/mutex.o: user/lib/thread/mutex.c \
- user/lib/inc/mutex_type.h 410user/lib/inc/syscall.h
-
-user/lib/inc/mutex_type.h:
-
-410user/lib/inc/syscall.h:

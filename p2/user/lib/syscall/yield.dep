@@ -1,4 +1,0 @@
-user/lib/syscall/yield.o: user/lib/syscall/yield.S \
- 410user/lib/inc/syscall_int.h
-
-410user/lib/inc/syscall_int.h:

@@ -1,4 +1,0 @@
-410user/lib/string/bcopy.o: 410user/lib/string/bcopy.S \
- 410user/lib/inc/asm.h
-
-410user/lib/inc/asm.h:
