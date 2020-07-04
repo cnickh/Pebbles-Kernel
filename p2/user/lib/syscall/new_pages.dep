@@ -1,0 +1,4 @@
+user/lib/syscall/new_pages.o: user/lib/syscall/new_pages.S \
+ 410user/lib/inc/syscall_int.h
+
+410user/lib/inc/syscall_int.h:

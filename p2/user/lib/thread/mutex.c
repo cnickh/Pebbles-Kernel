@@ -21,7 +21,7 @@ int mutex_lock(mutex_t *mp){
   if(mp->lock && mp->valid){ //If available grab and set yourself as holder
     mp->lock = 0;
     mp->holder = gettid();
-    return 1;
+    return 0;
   } else if(mp->valid){ //If locked yield to the holder
 
     if(yield(mp->holder) < 0){

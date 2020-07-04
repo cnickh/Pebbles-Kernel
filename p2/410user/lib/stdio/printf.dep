@@ -1,0 +1,11 @@
+410user/lib/stdio/printf.o: 410user/lib/stdio/printf.c \
+ 410user/lib/inc/stdio.h 410user/lib/inc/stdarg.h \
+ 410user/lib/inc/syscall.h 410user/lib/stdio/doprnt.h
+
+410user/lib/inc/stdio.h:
+
+410user/lib/inc/stdarg.h:
+
+410user/lib/inc/syscall.h:
+
+410user/lib/stdio/doprnt.h:

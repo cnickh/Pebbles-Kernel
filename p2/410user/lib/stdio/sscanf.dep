@@ -1,0 +1,9 @@
+410user/lib/stdio/sscanf.o: 410user/lib/stdio/sscanf.c \
+ 410user/lib/inc/stdarg.h 410user/lib/stdio/doscan.h \
+ 410user/lib/inc/syscall.h
+
+410user/lib/inc/stdarg.h:
+
+410user/lib/stdio/doscan.h:
+
+410user/lib/inc/syscall.h:

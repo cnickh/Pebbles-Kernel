@@ -16,25 +16,34 @@
 #include <rwlock_type.h>
 #include <sem_type.h>
 
-
 typedef struct stk_map { //Important variables for mapping the stack
 
   void *limit; //top of virtual process memory
   unsigned int tstack_sz; //space allocated for each thread
 
+
   mutex_t lock;
 
 } stk_map_t;
 
-typedef struct tcb { //Thread control block, for populating thread memory
+/* Defines thread info */
+typedef struct thread_t {
 
-  void *(*func)(void*);//function to execute
-  void *arg; //pointer to args
-
+  int tid;
   void *base;
+  void *status;
 
-} tcb_t;
+  struct thread_t *next;
 
+}thread_t;
+
+/* For tracking all currently running threads */
+typedef struct llist {
+
+  thread_t *main;
+  thread_t *tail;
+
+} llist_t;
 
 /*Functions for thread management*/
 int thr_init(unsigned int size);
@@ -46,8 +55,6 @@ int thr_join(int tid, void **statusp);
 void thr_exit (void *status);
 
 int thr_getid(void);
-
-void test_mem(void);
 
 /*Functions for mutexes*/
 int mutex_init(mutex_t *mp);

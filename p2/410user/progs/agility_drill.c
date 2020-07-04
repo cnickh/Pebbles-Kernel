@@ -86,7 +86,7 @@ void * chase(void * arg) {
   // we don't want behavior to be determined by thread id policy, use 0..n_chasethreads-1 here (passed in as argument)
   int my_creation_number = (int)arg;
 
-  lprintf("Starting chase thread with creation number %d\n", my_creation_number);
+  printf("Starting chase thread with creation number %d\n", my_creation_number);
 
   while (highest_mutex_released < n_mutexes - 1) {
 
@@ -108,6 +108,7 @@ void * chase(void * arg) {
 
   lprintf("Successful finish for thread with creation number %d\n", my_creation_number);
 
+  vanish();
   return (void *)1;
 }
 
