@@ -4,7 +4,7 @@
 
 thr_fork:
 
-// Get the argument (nw %ebp) and put it in %ebx
+// Get the argument (nw %esp) and put it in %ebx
 push %ebx
 mov 8(%esp), %ebx
 
@@ -14,13 +14,27 @@ INT $THREAD_FORK_INT
 test %eax, %eax
 jne .parent
 
-// child!
+// child
 mov %ebx, %esp //Give the child a nw %esp
-ret
+call 8(%esp)
+mov 12(%esp), %edx
+// return val?
+test %eax, %eax
+jne .set_status
+
+//set defaul status
+mov $0x1, %ebx
+mov %ebx, (%edx)
+INT $VANISH_INT
+
+.set_status:
+  mov %eax, (%edx)
+  INT $VANISH_INT
+
 
 .parent:
-pop %ebx
-ret
+  pop %ebx
+  ret
 
 .globl get_bp
 

@@ -1,35 +1,52 @@
-#include <syscall.h>
-#include <stdio.h>
-#include <libthread.h>
 #include <stdlib.h>
+#include <syscall.h>
+#include <libthread.h>
+#include <stdio.h>
+#include <string.h>
+
+#define stackSize 4096
+
+#define SUCCESS 0
 
 
-void *thread0(void*ptr){
-  printf("Hello from thread%d\n",thr_getid());
-  vanish();
+
+typedef struct myArgs{
+	char cookie; /** each of my threads.... gets a cookie :) **/
+} myArgs;
+
+void *baseFunc (void* arg)
+{
+  printf("My sp 0x%x\n",get_sp());
+
+  printf("My arg @ 0x%x\n",&arg);
+
+  printf("My arg = %d\n",*(unsigned int*)arg);
+
+  //thr_exit(1);
+
 }
 
-void *thread1(void*ptr){
-  printf("Hello from thread%d\n",thr_getid());
-  vanish();
-}
+int main(int argc, char **argv)
+{
 
-void *thread2(void*ptr){
-  printf("Hello from thread%d\n",thr_getid());
-  vanish();
-}
+  int *curArg = malloc(sizeof(int));
 
-int main(){
+  *curArg = 69;
+
+	thr_init(stackSize);
 
 
-  thr_init(4096);
 
-  void *ptr = _malloc(sizeof(int));
-  thr_create(thread0,ptr);
-  thr_create(thread1,ptr);
-  thr_create(thread2,ptr);
+	int tid  = thr_create(baseFunc, (void*)curArg);
 
-  printf("hello from main \n");
-  vanish();
+  void *statusp = malloc(sizeof(int));
+
+  thr_join(tid,(void**)&statusp);
+
+  printf("thread%d joined with status %d",tid,statusp);
+
+
+
+	return 0;
 
 }

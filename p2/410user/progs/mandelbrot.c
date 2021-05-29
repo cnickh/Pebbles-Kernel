@@ -12,7 +12,7 @@
 #include "syscall.h"
 #include "rand.h"
 
-#include "thread.h"
+#include "libthread.h"
 #include "cond.h"
 #include "mutex.h"
 #include "thrgrp.h"

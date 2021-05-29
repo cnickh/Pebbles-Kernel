@@ -10,7 +10,7 @@
  * @bug No known bugs.
  */
 
-#include <thread.h>
+#include <libthread.h>
 #include <syscall.h>
 #include <stdio.h>
 
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 	  if(status != i) {
 	    return -60;
 	  }
-	  
+
 	  if(thr_exit_return) {
 	    return -70;
 	  }

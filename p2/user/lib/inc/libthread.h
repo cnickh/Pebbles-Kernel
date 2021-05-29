@@ -2,7 +2,7 @@
 *
 * This file contian prototypes for all functions
 * in the libthread.a static library, will possibly
-* be broken up into multiple file in the future.
+* be broken up into multiple files in the future.
 *
 * Last Edit: 06/26/2020
 * Written by: Charles Nick Henry
@@ -16,6 +16,10 @@
 #include <rwlock_type.h>
 #include <sem_type.h>
 
+#include <syscall.h> //for system calls
+#include <stdio.h> //for printf(), could be removed
+#include <stdlib.h> //malloc()
+
 typedef struct stk_map { //Important variables for mapping the stack
 
   void *limit; //top of virtual process memory
@@ -26,24 +30,24 @@ typedef struct stk_map { //Important variables for mapping the stack
 
 } stk_map_t;
 
-/* Defines thread info */
+/* Defines a thread node to be used in tlist */
 typedef struct thread_t {
 
-  int tid;
-  void *base;
-  void *status;
+  int tid, status;
+  void *base; //%esp starting location
 
   struct thread_t *next;
 
 }thread_t;
 
-/* For tracking all currently running threads */
+/* Linked list for tracking all currently running threads */
 typedef struct llist {
 
   thread_t *main;
   thread_t *tail;
 
 } llist_t;
+
 
 /*Functions for thread management*/
 int thr_init(unsigned int size);
@@ -52,7 +56,7 @@ int thr_create(void *(*func)(void*), void *arg);
 
 int thr_join(int tid, void **statusp);
 
-void thr_exit (void *status);
+void thr_exit (int status);
 
 int thr_getid(void);
 

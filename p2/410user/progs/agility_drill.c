@@ -86,7 +86,7 @@ void * chase(void * arg) {
   // we don't want behavior to be determined by thread id policy, use 0..n_chasethreads-1 here (passed in as argument)
   int my_creation_number = (int)arg;
 
-  printf("Starting chase thread with creation number %d\n", my_creation_number);
+  //printf("Starting chase thread with creation number %d\n", my_creation_number);
 
   while (highest_mutex_released < n_mutexes - 1) {
 
@@ -106,7 +106,7 @@ void * chase(void * arg) {
     }
   }
 
-  lprintf("Successful finish for thread with creation number %d\n", my_creation_number);
+  //printf("Successful finish for thread with creation number %d\n", my_creation_number);
 
   vanish();
   return (void *)1;
@@ -146,9 +146,11 @@ int main( int argc, char *argv[] ) {
         printf("Footprint (number of locks acquired at the same time) must be at least 1\n");
         exit(1);
     }
+
     thr_init(STACK_SIZE);
     thrgrp_init_group(&tg);
     mtxs = (mutex_t *)calloc(n_mutexes, sizeof(mutex_t));
+
     for (i = 0; i < n_mutexes; i++) {
         assert(mutex_init(&(mtxs[i])) == 0);
     }
@@ -157,6 +159,7 @@ int main( int argc, char *argv[] ) {
     }
     for (i = 0; i < n_chasethreads; i++) {
         assert(thrgrp_join(&tg, &status_temporary) == 0);
+
     }
 	free(mtxs);
     exit(0);

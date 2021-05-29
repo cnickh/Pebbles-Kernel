@@ -77,7 +77,7 @@ UPDATE_METHOD = offline
 # A list of the test programs you want compiled in from the 410user/progs
 # directory
 #
-410TESTS = agility_drill
+410TESTS = agility_drill join_specific_test
 
 ###########################################################################
 # Test programs you have written which you wish to run
@@ -95,7 +95,7 @@ THREAD_OBJS = malloc.o thread.o mutex.o thr_fork.o cond.o
 ###########################################################################
 # Object files for your syscall wrappers
 ###########################################################################
-SYSCALL_OBJS = set_status.o vanish.o fork.o exec.o yield.o wait.o print.o new_pages.o remove_pages.o gettid.o
+SYSCALL_OBJS = set_status.o vanish.o fork.o exec.o yield.o wait.o print.o new_pages.o remove_pages.o gettid.o cas_runflag.o misbehave.o
 
 ###########################################################################
 # Libraries!

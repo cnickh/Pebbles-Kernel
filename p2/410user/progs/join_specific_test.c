@@ -16,7 +16,7 @@
  *
  *  Tests: syscalls, join on specific threads, malloc (thread-safety
  *         unnecessary)
- * 
+ *
  *  @author Mark T. Tomczak (mtomczak)
  *  @author Andy Herrman (aherrman)
  *
@@ -25,7 +25,7 @@
 
 #include <stdlib.h>
 #include <syscall.h>
-#include <thread.h>
+#include <libthread.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -56,15 +56,15 @@ int main(int argc, char **argv)
 	int i;
 	myArgs *curArg;
 	char *myOutput="Hello, world!\n";
-	
+
 	thr_init(stackSize);
 
 	for (i=0; i<strlen(myOutput); i++)
 		{
 			curArg=malloc(sizeof(myArgs));
-			
+
 			curArg->cookie=myOutput[i];
-			
+
 			tids[i]=thr_create(baseFunc, (void *)curArg);
 		}
 
@@ -82,6 +82,5 @@ int main(int argc, char **argv)
 		}
 
 	return 0;
-	
-}
 
+}

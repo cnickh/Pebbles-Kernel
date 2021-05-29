@@ -1,0 +1,7 @@
+# Import from config.mk
+STUULIB_SYSCALL_OBJS := $(SYSCALL_OBJS:%=$(STUULIBDIR)/syscall/%)
+
+ALL_STUUOBJS += $(STUULIB_SYSCALL_OBJS)
+STUUCLEANS += $(STUULIBDIR)/libsyscall.a
+
+$(STUULIBDIR)/libsyscall.a: $(STUULIB_SYSCALL_OBJS)

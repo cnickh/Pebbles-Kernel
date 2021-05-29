@@ -4,10 +4,10 @@
  *         into your user_tests, then change or add to it as you see fit!
  *
  *  User uses ',' and '.' keys to move a small cursor, attempting to keep
- *  it within range of a ``bead'' on the string. User gets points for keeping 
+ *  it within range of a ``bead'' on the string. User gets points for keeping
  *  the cursor on the bead.
  *
- *  This program utilizes four threads: a scoring thread, cursor control 
+ *  This program utilizes four threads: a scoring thread, cursor control
  *  thread,
  *  screen update thread, and bead control thread. The threads intercommunicate
  *  through a world lock mutex and and update condition variable: when a thread
@@ -30,7 +30,7 @@
  *       Avoid allowing the direction keys to repeat
  **/
 
-#include <thread.h>
+#include <libthread.h>
 #include <stdio.h>
 #include <syscall.h>
 #include <stdlib.h>
@@ -101,7 +101,7 @@ void scheduleUpdate(void)
 
 	/** signal update if it was waiting **/
 	try(cond_signal(&updates));
-	
+
 	/** unlock update flag **/
 	try(mutex_unlock(&updateLock));
 
@@ -124,7 +124,7 @@ void waitUpdate(void)
 			/** wait for an update **/
 			try(cond_wait(&updates, &updateLock));
 
-		 
+
 		}
 	updatePending=0;
 	/* give back the update mutex **/
@@ -152,7 +152,7 @@ void *update(void *ignored)
 			//lprintf_kern("updateThread: ping!");
 			/** request received; re-draw the world **/
 			try(mutex_lock(&worldLock));
-			
+
 			/* draw the target */
 			set_cursor_pos(GAMEBAR_ROW, oldTargetPos);
 			print(1, GAMEBAR_BAR);
@@ -170,22 +170,22 @@ void *update(void *ignored)
 			/* draw the score */
 			set_cursor_pos(22,0);
 			printf("Score: %d\n",p1Score);
-			
-		
-			
+
+
+
 			/** unlock world **/
 			try(mutex_unlock(&worldLock));
 
-     
-      
+
+
 			yield(-1);
 		}
 }
-	 
-/** @brief Receives control input and updates the world 
+
+/** @brief Receives control input and updates the world
  *
  *  Function to receive control updates. It updates the position of the
- *  cursor and calls the screen update function 
+ *  cursor and calls the screen update function
  *
  **/
 
@@ -193,7 +193,7 @@ void *controlThread(void *ignored)
 {
 
 	int error;
-  int done = 0;	
+  int done = 0;
 	while(!done)
 		{
 			//lprintf_kern("controlThread: ping!\n");
@@ -232,8 +232,8 @@ void *controlThread(void *ignored)
   return (void *)CONTROL_EXIT_CODE;
 }
 
-/** @brief Moves the target 
- * 
+/** @brief Moves the target
+ *
  *  function ``randomly'' walks target left and right every n ticks.
  *
  **/
@@ -242,19 +242,19 @@ void *targetThread(void *ignored)
 {
 	int nextStep=FIRSTSTEP;
 	int error;
-	
+
 	while(1)
 		{
 			//lprintf_kern("targetThread: Ping!");
 			sleep(TARGET_TIME);
-			
+
 			/** choose ``random'' direction for target **/
 			nextStep ^= nextStep>> 5;
 			nextStep ^= nextStep<< 13;
-			
+
 			/** grab world lock **/
 			try(mutex_lock(&worldLock));
-			
+
 			/** move target **/
 			if((nextStep & 0x01))
 				{
@@ -272,25 +272,25 @@ void *targetThread(void *ignored)
 							targetPos = CURSOR_MIN;
 						}
 				}
-			
+
 			/** schedule an update **/
 			scheduleUpdate();
 			try(mutex_unlock(&worldLock));
       if(goFlag)
         return (void *) BEAD_EXIT_CODE;
-			
+
 		}
-	
+
 }
 
-/** @brief Updates the score 
+/** @brief Updates the score
  *
  *  This thread runs at some fraction of the bar update rate, and
  *  increases the score by 1 every time it notes the cursor and the bar
  *  are on top of each other. This function doesn't call update, because
  *  it would be slower than necessary
  *
- *  Our implementation is very busy. This isn't really necessary... 
+ *  Our implementation is very busy. This isn't really necessary...
  *  technically,
  *  the cursor moving function should wake up the scoring function.
  **/
@@ -305,7 +305,7 @@ void *scoreThread(void *ignore)
 
 			/* lock the world */
 			try(mutex_lock(&worldLock));
-			
+
 			/* check for scoring state */
 			if(targetPos == p1Cursor)
 				{
@@ -346,7 +346,7 @@ int main(int argc, char ** argv)
 	try(cond_init(&updates));
 	try(cond_init(&gameOver));
 	initScreen();
-	
+
   thrgrp_init_group(&tg);
 	try(thrgrp_create(&tg,update, 0));
 	try(thrgrp_create(&tg,controlThread, 0));
@@ -370,6 +370,6 @@ int main(int argc, char ** argv)
       try(thrgrp_join(&tg, (void **)&retcode));
       printf("Worker thread returned with code %d.\n",retcode);
     }
- 
+
 	return 0;
 }

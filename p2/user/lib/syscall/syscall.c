@@ -79,7 +79,7 @@ int get_ticks()
 	return 1;
 }
 
-void misbehave(int mode)
-{
-	return;
-}
+// void misbehave(int mode)
+// {
+// 	return;
+// }

@@ -1,6 +1,5 @@
 #include <libthread.h> //This file implements functions prototyped here
-#include <syscall.h> //for system calls
-#include <stdio.h> //for printf(), could be removed
+
 
 
 extern int thr_fork();
@@ -9,13 +8,13 @@ extern unsigned int get_bp();
 
 extern unsigned int get_sp();
 
-stk_map_t stk_map;
+stk_map_t *stk_map;
 
 llist_t *tlist;
 
-#define DECREMENT() (stk_map.limit - stk_map.tstack_sz)
+#define DECREMENT() (stk_map->limit - stk_map->tstack_sz)
 
-#define INCREMENT() (stk_map.limit + stk_map.tstack_sz)
+#define INCREMENT() (stk_map->limit + stk_map->tstack_sz)
 
 #define MK_PAGE_ALIGN(size) (size - (size % PAGE_SIZE))
 
@@ -26,21 +25,26 @@ llist_t *tlist;
 */
 int thr_init(unsigned int size){
 
+  /* malloc space for the thread list here after "tlist"*/
+  tlist = malloc(sizeof(llist_t));
+  stk_map = malloc(sizeof(stk_map));
+
+
   /* Set thread stack size */
-  stk_map.tstack_sz = MK_PAGE_ALIGN(size);
+  stk_map->tstack_sz = MK_PAGE_ALIGN(size);
 
   /* Set limit of stack memory past bottom of autostack */
-  stk_map.limit = (void *)(MK_PAGE_ALIGN(get_sp()) - 3*PAGE_SIZE);
+  stk_map->limit = (void *)(MK_PAGE_ALIGN(get_sp()) - 3*PAGE_SIZE);
 
   /* Initialize lock to protect stack*/
-  mutex_init(&stk_map.lock);
+  mutex_init(&stk_map->lock);
 
   /*Initialize tlist*/
-  thread_t main;
-  main.tid = gettid();
-  main.base = (void *)get_sp();
-  main.status = NULL;
-  tlist->tail = tlist->main = &main;
+  thread_t *main = malloc(sizeof(thread_t));
+  main->tid = gettid();
+  main->base = (void *)get_sp();
+  main->status = NULL;
+  tlist->tail = tlist->main = main;
   tlist->main->next = NULL;
 
   return 0;
@@ -52,48 +56,56 @@ int thr_init(unsigned int size){
 * call thr_fork() and pass %esp to the newly allocated stack space
 *
 _________STACK__________
-0xfffff000, esp_main round down
-0xffffe000, end of initial task stack
-0xffffd000
-0xffffc000, end of new mem  <----- initial stk_map.limit
-0xffffb000, new_pages(PAGE_SIZE)
+0xfffff000, lowest address of main thread' stack
+0xffffe000, end of initial  autostack
+0xffffd000, initial value of stk_map.limit
+0xffffc000
+0xffffb000, 1st new_pages(PAGE_SIZE) call
 
 */
 
 
 int thr_create(void *(*func)(void*), void *arg){
 
-  /* Make sure no other thread touches the stack at the same time*/
-  mutex_lock(&stk_map.lock);
+  /*create object to track thread*/
+  thread_t *nw_thread = malloc(sizeof(thread_t));
 
-  /*Make an attempt to allocate memory*/
-  int err = new_pages(DECREMENT(),stk_map.tstack_sz);
+  /* Make sure no other thread touches the stack at the same time*/
+  mutex_lock(&stk_map->lock);
 
   /*Set the new thread stack base to the bottom of the current stack*/
-  void *tbase = stk_map.limit-12;
-
-  /*IMPORTANT thread memory must be layed out BEFORE forking*/
-  *(unsigned int *)tbase = (unsigned int)func;
-  *((unsigned int *)tbase +2) = (unsigned int)arg;
-
-  /*fork and pass the thread esp*/
-  int tid = thr_fork(tbase);
+  void *thr_sp = stk_map->limit-16;
 
   /*decrement task limit, extend*/
-  stk_map.limit = DECREMENT();
+  stk_map->limit = DECREMENT();
 
-  mutex_unlock(&stk_map.lock);
+  /*Make an attempt to allocate memory*/
+  int err = new_pages(stk_map->limit,stk_map->tstack_sz);
+  if(err != 0){
+    printf("new_pages failed with %d\n",err);
+  }else{
+    nw_thread->base = stk_map->limit;
+  }
+
+  mutex_unlock(&stk_map->lock);
+
+  /*IMPORTANT thread memory must be layed out BEFORE forking*/
+  *((unsigned int *)thr_sp) = (unsigned int)arg;
+  *((unsigned int *)thr_sp+2) = (unsigned int)func;
+  *((unsigned int *)thr_sp+3) = (unsigned int)&nw_thread->status;
+
+
+  /*fork and pass the thread esp*/
+  int tid = thr_fork(thr_sp);
 
   /*Add thread to tlist*/
-  thread_t nw_thread;
-  nw_thread.tid = tid;
-  nw_thread.base = tbase;
-  nw_thread.status = NULL;
+  nw_thread->tid = tid;
+  nw_thread->status = NULL;
 
-  tlist->tail->next = &nw_thread;
-  tlist->tail = &nw_thread;
+  tlist->tail->next = nw_thread;
+  tlist->tail = nw_thread;
 
-  return 0;
+  return tid;
 }
 
 /*
@@ -108,10 +120,14 @@ int thr_join(int tid, void **statusp){
   thread_t *prev, *next;
 
   while(temp != tlist->tail){
-    next = temp-> next;
-    if(tid == temp->tid) break;
+    next = temp->next;
+    if(tid == temp->tid)break;
     prev = temp;
     temp = temp->next;
+  }
+
+  if(temp->tid != tid){
+    return -1;
   }
 
   //if not running
@@ -121,42 +137,35 @@ int thr_join(int tid, void **statusp){
       prev->next = next;
 
       /* store status in statusp */
-      *statusp = temp->status;
+      *statusp = (void *)temp->status;
+
+      /*free space*/
+      remove_pages(temp->base);
+      free(temp);
+
 
   }else{//else
-      yield(tid);
-      thr_join(tid,statusp);
-    }
-
+    yield(tid);
+    thr_join(tid,statusp);
+  }
 
   return 0;
 }
 
-void thr_exit (void *status){
+void thr_exit (int status){
 
-  void *sp = (void *)get_sp();
   thread_t *temp = tlist->main;
-  thread_t *me = NULL;
 
-  /* Find entry in tlist with sp */
-  for (int i=0; i<PAGE_SIZE;i++){
+  int tid = gettid();
 
-    while(temp != tlist->tail){
-      if(temp->base == sp +i){
-        me = temp;
-        break;
-      }
-      temp = temp->next;
-    }
-    if(me != NULL)break;
-    temp = tlist->main;
+  /* Find entry in tlist with tid */
+  while(temp != tlist->tail){
+    if(temp->tid == tid)break;
+    temp = temp->next;
   }
 
   /* Store status*/
-  me->status = status;
-
-  /* Free space*/
-  remove_pages(me->base +12);
+  temp->status = status;
 
   vanish();
 }
