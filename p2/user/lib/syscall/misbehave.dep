@@ -1,0 +1,4 @@
+user/lib/syscall/misbehave.o: user/lib/syscall/misbehave.S \
+ 410user/lib/inc/syscall_int.h
+
+410user/lib/inc/syscall_int.h:

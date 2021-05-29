@@ -1,0 +1,11 @@
+410user/lib/stdio/doprnt.o: 410user/lib/stdio/doprnt.c \
+ 410user/lib/inc/stdarg.h 410user/lib/inc/string.h \
+ 410user/lib/inc/alloca.h 410user/lib/stdio/doprnt.h
+
+410user/lib/inc/stdarg.h:
+
+410user/lib/inc/string.h:
+
+410user/lib/inc/alloca.h:
+
+410user/lib/stdio/doprnt.h:

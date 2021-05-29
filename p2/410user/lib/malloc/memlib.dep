@@ -1,0 +1,9 @@
+410user/lib/malloc/memlib.o: 410user/lib/malloc/memlib.c \
+ 410user/lib/inc/syscall.h 410user/lib/inc/stdio.h \
+ 410user/lib/inc/stdarg.h
+
+410user/lib/inc/syscall.h:
+
+410user/lib/inc/stdio.h:
+
+410user/lib/inc/stdarg.h:

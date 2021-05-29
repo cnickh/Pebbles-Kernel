@@ -1,0 +1,4 @@
+410user/lib/string/bzero.o: 410user/lib/string/bzero.S \
+ 410user/lib/inc/asm.h
+
+410user/lib/inc/asm.h:

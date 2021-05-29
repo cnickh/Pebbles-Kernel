@@ -1,0 +1,4 @@
+user/lib/syscall/set_status.o: user/lib/syscall/set_status.S \
+ 410user/lib/inc/syscall_int.h
+
+410user/lib/inc/syscall_int.h:

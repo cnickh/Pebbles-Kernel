@@ -1,0 +1,4 @@
+user/lib/syscall/cas_runflag.o: user/lib/syscall/cas_runflag.S \
+ 410user/lib/inc/syscall_int.h
+
+410user/lib/inc/syscall_int.h:

@@ -1,0 +1,29 @@
+/home/nick/CMU-15-410/p2/user/lib/inc/mutex_type.h:9: warning: Compound mutex is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:34: warning: Compound thread_t is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:44: warning: Compound llist is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:17: warning: Compound cond is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:23: warning: Compound stk_map is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:8: warning: Compound node is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:14: warning: Member node_t (typedef) of file cond_type.h is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:24: warning: Member cond_t (typedef) of file cond_type.h is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/mutex_type.h:15: warning: Member mutex_t (typedef) of file mutex_type.h is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/rwlock_type.h:11: warning: Member rwlock_t (typedef) of file rwlock_type.h is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/sem_type.h:11: warning: Member sem_t (typedef) of file sem_type.h is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:19: warning: Member valid (variable) of class cond is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:20: warning: Member qhead (variable) of class cond is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:21: warning: Member qtail (variable) of class cond is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:46: warning: Member main (variable) of class llist is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:47: warning: Member tail (variable) of class llist is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/mutex_type.h:10: warning: Member valid (variable) of class mutex is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/mutex_type.h:11: warning: Member lock (variable) of class mutex is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/mutex_type.h:13: warning: Member holder (variable) of class mutex is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:10: warning: Member tid (variable) of class node is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:11: warning: Member oldflag (variable) of class node is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/cond_type.h:12: warning: Member next (variable) of class node is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:25: warning: Member limit (variable) of class stk_map is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:26: warning: Member tstack_sz (variable) of class stk_map is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:29: warning: Member lock (variable) of class stk_map is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:36: warning: Member tid (variable) of class thread_t is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:36: warning: Member status (variable) of class thread_t is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:37: warning: Member base (variable) of class thread_t is not documented.
+/home/nick/CMU-15-410/p2/user/lib/inc/libthread.h:39: warning: Member next (variable) of class thread_t is not documented.
