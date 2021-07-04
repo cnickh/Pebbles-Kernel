@@ -20,7 +20,7 @@ void *baseFunc (void* arg)
 
   printf("My arg @ 0x%x\n",&arg);
 
-  printf("My arg = %d\n",*(unsigned int*)arg);
+  printf("My arg = %d\n",(unsigned int)arg);
 
   //thr_exit(1);
 
@@ -36,14 +36,13 @@ int main(int argc, char **argv)
 	thr_init(stackSize);
 
 
-
-	int tid  = thr_create(baseFunc, (void*)curArg);
+	int tid  = thr_create(baseFunc,curArg);
 
   void *statusp = malloc(sizeof(int));
 
   thr_join(tid,(void**)&statusp);
 
-  printf("thread%d joined with status %d",tid,statusp);
+  printf("thread%d joined with status %d",tid,*(int*)statusp);
 
 
 

@@ -77,7 +77,9 @@ int main(int argc, char **argv)
 
 			if(curArg != NULL)
 				{
+					printf("trying to free status pointer @ 0x%x\n",curArg);
 					free(curArg);
+					printf("Statusp freed\n");
 				}
 		}
 

@@ -17,10 +17,10 @@
  */
 
 
-int cas_runflag(int tid, int *oldp, int *expectp, int *newp)
-{
-	return -1;
-}
+// int cas_runflag(int tid, int *oldp, int *expectp, int *newp)
+// {
+// 	return -1;
+// }
 
 
 int sleep(int ticks)

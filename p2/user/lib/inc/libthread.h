@@ -26,7 +26,7 @@ typedef struct stk_map { //Important variables for mapping the stack
   unsigned int tstack_sz; //space allocated for each thread
 
 
-  mutex_t lock;
+  mutex_t *lock;
 
 } stk_map_t;
 
@@ -39,15 +39,6 @@ typedef struct thread_t {
   struct thread_t *next;
 
 }thread_t;
-
-/* Linked list for tracking all currently running threads */
-typedef struct llist {
-
-  thread_t *main;
-  thread_t *tail;
-
-} llist_t;
-
 
 /*Functions for thread management*/
 int thr_init(unsigned int size);

@@ -10,7 +10,7 @@ extern unsigned int get_sp();
 
 stk_map_t *stk_map;
 
-llist_t *tlist;
+thread_t *main_t;
 
 #define DECREMENT() (stk_map->limit - stk_map->tstack_sz)
 
@@ -26,8 +26,8 @@ llist_t *tlist;
 int thr_init(unsigned int size){
 
   /* malloc space for the thread list here after "tlist"*/
-  tlist = malloc(sizeof(llist_t));
   stk_map = malloc(sizeof(stk_map));
+  stk_map->lock = malloc(sizeof(mutex_t));
 
 
   /* Set thread stack size */
@@ -37,15 +37,17 @@ int thr_init(unsigned int size){
   stk_map->limit = (void *)(MK_PAGE_ALIGN(get_sp()) - 3*PAGE_SIZE);
 
   /* Initialize lock to protect stack*/
-  mutex_init(&stk_map->lock);
+  mutex_init(stk_map->lock);
+
 
   /*Initialize tlist*/
-  thread_t *main = malloc(sizeof(thread_t));
-  main->tid = gettid();
-  main->base = (void *)get_sp();
-  main->status = NULL;
-  tlist->tail = tlist->main = main;
-  tlist->main->next = NULL;
+  main_t = malloc(sizeof(thread_t));
+
+
+  main_t->tid = gettid();
+  main_t->base = (void *)get_sp();
+  main_t->status = NULL;
+  main_t->next = NULL;
 
   return 0;
 }
@@ -71,7 +73,7 @@ int thr_create(void *(*func)(void*), void *arg){
   thread_t *nw_thread = malloc(sizeof(thread_t));
 
   /* Make sure no other thread touches the stack at the same time*/
-  mutex_lock(&stk_map->lock);
+  mutex_lock(stk_map->lock);
 
   /*Set the new thread stack base to the bottom of the current stack*/
   void *thr_sp = stk_map->limit-16;
@@ -87,23 +89,28 @@ int thr_create(void *(*func)(void*), void *arg){
     nw_thread->base = stk_map->limit;
   }
 
-  mutex_unlock(&stk_map->lock);
+  mutex_unlock(stk_map->lock);
 
   /*IMPORTANT thread memory must be layed out BEFORE forking*/
-  *((unsigned int *)thr_sp) = (unsigned int)arg;
-  *((unsigned int *)thr_sp+2) = (unsigned int)func;
-  *((unsigned int *)thr_sp+3) = (unsigned int)&nw_thread->status;
-
+  *((unsigned int *)thr_sp) = *(unsigned int*)arg;
 
   /*fork and pass the thread esp*/
-  int tid = thr_fork(thr_sp);
+  int tid = thr_fork(thr_sp,func,&nw_thread->status);
 
   /*Add thread to tlist*/
   nw_thread->tid = tid;
   nw_thread->status = NULL;
 
-  tlist->tail->next = nw_thread;
-  tlist->tail = nw_thread;
+  thread_t *temp = main_t;
+
+  while(1){
+    if (temp->next == NULL)
+      {break;}
+    temp = temp->next;
+  }
+
+  temp->next = nw_thread;
+
 
   return tid;
 }
@@ -115,18 +122,16 @@ int thr_create(void *(*func)(void*), void *arg){
 
 int thr_join(int tid, void **statusp){
 
-  /* Find entry in tlist with tid */
-  thread_t *temp = tlist->main;
-  thread_t *prev, *next;
+  thread_t *temp = main_t;
+  thread_t *prev;
 
-  while(temp != tlist->tail){
-    next = temp->next;
-    if(tid == temp->tid)break;
+  while(temp != NULL){
     prev = temp;
     temp = temp->next;
+    if (temp->tid == tid)break;
   }
 
-  if(temp->tid != tid){
+  if(temp == NULL){
     return -1;
   }
 
@@ -134,15 +139,14 @@ int thr_join(int tid, void **statusp){
   if(temp->status != NULL){
 
       /* remove from tlist */
-      prev->next = next;
+      prev->next = temp->next;
 
       /* store status in statusp */
-      *statusp = (void *)temp->status;
+      *statusp = (void*)&temp->status;
 
       /*free space*/
       remove_pages(temp->base);
       free(temp);
-
 
   }else{//else
     yield(tid);
@@ -154,14 +158,14 @@ int thr_join(int tid, void **statusp){
 
 void thr_exit (int status){
 
-  thread_t *temp = tlist->main;
+  thread_t *temp = main_t;
 
   int tid = gettid();
 
   /* Find entry in tlist with tid */
-  while(temp != tlist->tail){
-    if(temp->tid == tid)break;
+  while(temp != NULL){
     temp = temp->next;
+    if(temp->tid == tid)break;
   }
 
   /* Store status*/

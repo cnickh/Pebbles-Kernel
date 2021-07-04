@@ -85,12 +85,12 @@ UPDATE_METHOD = offline
 # A list of the test programs you want compiled in from the user/progs
 # directory
 #
-STUDENTTESTS = syscall_test forkedp thread_test
+STUDENTTESTS = mutex_test forkedp thread_test
 
 ###########################################################################
 # Object files for your thread library
 ###########################################################################
-THREAD_OBJS = malloc.o thread.o mutex.o thr_fork.o cond.o
+THREAD_OBJS = malloc.o thread.o mutex.o thr_fork.o cond.o xchg.o
 
 ###########################################################################
 # Object files for your syscall wrappers

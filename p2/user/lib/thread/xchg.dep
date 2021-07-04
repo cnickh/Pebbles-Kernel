@@ -1,0 +1,1 @@
+user/lib/thread/xchg.o: user/lib/thread/xchg.S

@@ -24,5 +24,6 @@ void *realloc(void *__buf, size_t __new_size)
 
 void free(void *__buf)
 {
+  _free(__buf);
   return;
 }

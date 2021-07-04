@@ -4,10 +4,10 @@
 /*Functions for condition variables*/
 int cond_init(cond_t *cv){
 
-  node_t head;
-  head.tid = NULL;
-  cv->qhead = cv->qtail = &head;
-  cv->qhead->next = &cv->qtail;
+  node_t *head = malloc(sizeof(node_t));
+  head->tid = NULL;
+  cv->qhead = cv->qtail = head;
+  cv->qhead->next = NULL;
 
   return 0;
 }
@@ -16,7 +16,23 @@ int cond_init(cond_t *cv){
 */
 int cond_destroy(cond_t *cv){
 
+  node_t *temp = cv->qhead;
+
+  int *newp = malloc(sizeof(int));
+  int *expectp = malloc(sizeof(int));
+
   //Check wQueue and release waiting thread
+  while(temp != cv->qtail){
+
+    if(temp->tid != NULL)
+      printf("cas_ runflag() %d",cas_runflag(temp->tid,temp->oldflag,expectp,newp));
+
+    temp = temp->next;
+  }
+
+
+  free(newp);
+  free(expectp);
   //set invalid
 
 
@@ -31,15 +47,38 @@ int cond_destroy(cond_t *cv){
 */
 int cond_wait(cond_t *cv, mutex_t *mp){
 
+  int tid = gettid();
+
+  node_t *temp = malloc(sizeof(node_t));
+
+  temp->oldflag = malloc(sizeof(int));
+
+  int *expectp = malloc(sizeof(int));
+
+  int *newp = malloc(sizeof(int));
+
   mutex_unlock(mp); //release lock
 
-  //add to cv->wQueue
-  node_t temp;
-  temp.tid = gettid();
-  cv->qtail->next = &temp;
-  cv->qtail = &temp;
+  temp->tid = tid;
 
-  //block with cas_runflag(gettid(),&0,&0,&-1);
+  /*add to cv->wQueue*/
+  if(cv->qhead->tid == NULL){
+    cv->qhead = cv->qtail = temp;
+  }else{
+    cv->qtail->next = temp;
+    cv->qtail = temp;
+  }
+
+  /*set up for cas_runflag call*/
+  *temp->oldflag = 0;
+  *expectp = 0;
+  *newp = -1;
+
+  //block with cas_runflag(int tid, int *oldp, int *expectp, int *newp);
+  printf("cas_ runflag() %d",cas_runflag(tid,temp->oldflag,expectp,newp));
+
+  free(newp);
+  free(expectp);
 
   mutex_lock(mp); //aquire lock
 
@@ -51,13 +90,35 @@ int cond_wait(cond_t *cv, mutex_t *mp){
 */
 int cond_signal(cond_t *cv){
 
-  //dequeue from wQueue
-  //call cas_runflag()
+  node_t *temp;
 
-  return -1;
+  int *expectp = malloc(sizeof(int));
+
+  int *newp = malloc(sizeof(int));
+
+  /*dequeue from wQueue*/
+  temp = cv->qhead;
+  cv->qhead = temp->next;
+
+  *expectp = -1;
+  *newp = 0;
+
+  /*call cas_runflag()*/
+  if(temp->tid != NULL){
+    printf("cas_ runflag() %d",cas_runflag(temp->tid,temp->oldflag,expectp,newp));
+
+    free(expectp);
+    free(newp);
+    free(temp->oldflag);
+    free(temp);
+
+    return 0;
+  }else{
+    return -1;
+  }
 }
 
-/*@brief wakes up all thread currently waiting.
+/*@brief wakes up all threads currently waiting.
 */
 int cond_broadcast(cond_t *cv){
 
