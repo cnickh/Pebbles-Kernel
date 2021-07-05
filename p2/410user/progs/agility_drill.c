@@ -72,7 +72,7 @@
 #define STUPID_MAGIC_CONSTANT 4
 
 int n_mutexes = 200; // number of mutexes in array - must be at least 1 and strictly larger than footprint
-int n_chasethreads = 20; // total number of chase threads
+int n_chasethreads = 7; // total number of chase threads
 int footprint = 2; // maximum number of mutexes held simultaneously by each thread - must be at least 2
 mutex_t * mtxs; // mutex array
 thrgrp_group_t tg;
@@ -85,6 +85,8 @@ void * chase(void * arg) {
   int highest_mutex_released = -1;
   // we don't want behavior to be determined by thread id policy, use 0..n_chasethreads-1 here (passed in as argument)
   int my_creation_number = (int)arg;
+
+  printf("Starting chase thread#%d\n",my_creation_number);
 
   //printf("Starting chase thread with creation number %d\n", my_creation_number);
 
@@ -107,6 +109,9 @@ void * chase(void * arg) {
   }
 
   //printf("Successful finish for thread with creation number %d\n", my_creation_number);
+
+  printf("Successful finish for chase thread#%d\n",my_creation_number);
+
 
   vanish();
   return (void *)1;
@@ -161,6 +166,7 @@ int main( int argc, char *argv[] ) {
         assert(thrgrp_join(&tg, &status_temporary) == 0);
 
     }
+  printf("Hello\n");
 	free(mtxs);
     exit(0);
 }

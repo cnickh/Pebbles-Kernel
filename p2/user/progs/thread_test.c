@@ -18,11 +18,13 @@ void *baseFunc (void* arg)
 {
   printf("My sp 0x%x\n",get_sp());
 
-  printf("My arg @ 0x%x\n",&arg);
+  printf("My arg @ 0x%x\n",arg);
 
-  printf("My arg = %d\n",(unsigned int)arg);
+  printf("My arg = %d\n",*(unsigned int*)arg);
 
   //thr_exit(1);
+
+	return (void*)69;
 
 }
 
@@ -42,7 +44,7 @@ int main(int argc, char **argv)
 
   thr_join(tid,(void**)&statusp);
 
-  printf("thread%d joined with status %d",tid,*(int*)statusp);
+  printf("thread%d joined with status %d",tid,statusp);
 
 
 

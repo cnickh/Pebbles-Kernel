@@ -21,21 +21,19 @@ jne .parent
 // child
 mov %ebx, %esp //Give the child a nw %esp
 call *%esi
-movl $0x1, (%edi)
-INT $VANISH_INT
+
 
 // return val?
-//; test %eax, %eax
-//; jne .set_status
+test %eax, %eax
+jne .set_status
 
 //set defaul status
-//; mov $0x1, %ebx
-//; mov %ebx, (%edx)
-//; INT $VANISH_INT
+movl $0x9, (%edi)
+INT $VANISH_INT
 
-//; .set_status:
-//;   mov %eax, (%edx)
-//;   INT $VANISH_INT
+.set_status:
+  mov %eax, (%edi)
+  INT $VANISH_INT
 
 
 .parent:

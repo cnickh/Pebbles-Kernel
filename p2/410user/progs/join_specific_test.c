@@ -74,12 +74,9 @@ int main(int argc, char **argv)
 				{
 					lprintf_kern("Thr_join error %d\n",error);
 				}
-
 			if(curArg != NULL)
 				{
-					printf("trying to free status pointer @ 0x%x\n",curArg);
 					free(curArg);
-					printf("Statusp freed\n");
 				}
 		}
 

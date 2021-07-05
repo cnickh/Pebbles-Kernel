@@ -17,7 +17,7 @@ void * chase(void * arg) {
   int next_mutex_to_acquire = 0;
   int highest_mutex_released = -1;
   // we don't want behavior to be determined by thread id policy, use 0..n_chasethreads-1 here (passed in as argument)
-  int my_creation_number = (int)arg;
+  int my_creation_number = *(int*)arg;
 
   printf("Starting chase thread with creation number %d\n", my_creation_number);
 

@@ -92,7 +92,7 @@ int thr_create(void *(*func)(void*), void *arg){
   mutex_unlock(stk_map->lock);
 
   /*IMPORTANT thread memory must be layed out BEFORE forking*/
-  *((unsigned int *)thr_sp) = *(unsigned int*)arg;
+  *((void**)thr_sp) = arg;
 
   /*fork and pass the thread esp*/
   int tid = thr_fork(thr_sp,func,&nw_thread->status);
@@ -121,7 +121,6 @@ int thr_create(void *(*func)(void*), void *arg){
 */
 
 int thr_join(int tid, void **statusp){
-
   thread_t *temp = main_t;
   thread_t *prev;
 
@@ -137,22 +136,24 @@ int thr_join(int tid, void **statusp){
 
   //if not running
   if(temp->status != NULL){
-
       /* remove from tlist */
       prev->next = temp->next;
 
       /* store status in statusp */
-      *statusp = (void*)&temp->status;
+      *statusp = (void*)temp->status;
 
       /*free space*/
       remove_pages(temp->base);
       free(temp);
 
-  }else{//else
-    yield(tid);
-    thr_join(tid,statusp);
-  }
 
+  }else{//else
+    if(yield(tid)<0){
+      temp->status = -1;
+    }
+    thr_join(tid,statusp);
+    return 0;
+  }
   return 0;
 }
 

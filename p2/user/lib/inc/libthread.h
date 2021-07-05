@@ -33,7 +33,8 @@ typedef struct stk_map { //Important variables for mapping the stack
 /* Defines a thread node to be used in tlist */
 typedef struct thread_t {
 
-  int tid, status;
+  int tid;
+  int status;
   void *base; //%esp starting location
 
   struct thread_t *next;
